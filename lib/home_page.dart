@@ -1,10 +1,20 @@
+import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:totp_sample_app/routes.dart';
 
-class VerificationSuccessfulPage extends StatelessWidget {
-  const VerificationSuccessfulPage({super.key});
+class HomePage extends StatefulWidget {
+  const HomePage({
+    required this.username,
+    super.key,
+  });
 
+  final String username;
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,7 +29,7 @@ class VerificationSuccessfulPage extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    'Two-Factor Verification',
+                    'Home Page',
                     style: Theme.of(context)
                         .textTheme
                         .titleLarge
@@ -29,13 +39,13 @@ class VerificationSuccessfulPage extends StatelessWidget {
                   const Divider(),
                   const SizedBox(height: 16),
                   const Icon(
-                    Icons.check_circle,
+                    Icons.home_work,
                     color: Color.fromRGBO(0, 180, 125, 1),
                     size: 64,
                   ),
                   const SizedBox(height: 16),
                   Text(
-                    'Two-Factor \nAuthentication is successful!',
+                    'Welcome ${widget.username}! \nThis is your home page after you sign in.',
                     textAlign: TextAlign.center,
                     style: Theme.of(context).textTheme.displaySmall?.copyWith(
                           fontWeight: FontWeight.bold,
@@ -52,13 +62,20 @@ class VerificationSuccessfulPage extends StatelessWidget {
                           borderRadius: BorderRadius.circular(8),
                         ),
                       ),
-                      onPressed: () {
-                        context.go(Routes.signIn);
+                      onPressed: () async {
+                        try {
+                          await Amplify.Auth.signOut();
+                          if (mounted) {
+                            context.go(Routes.signIn);
+                          }
+                        } on AuthException catch (e) {
+                          _showSnackBar('Error signing out - ${e.message}');
+                        }
                       },
                       child: Padding(
                         padding: const EdgeInsets.symmetric(vertical: 12),
                         child: Text(
-                          'Close',
+                          'Sign out',
                           style:
                               Theme.of(context).textTheme.labelLarge?.copyWith(
                                     fontSize: 16,
@@ -73,6 +90,14 @@ class VerificationSuccessfulPage extends StatelessWidget {
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  void _showSnackBar(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
       ),
     );
   }

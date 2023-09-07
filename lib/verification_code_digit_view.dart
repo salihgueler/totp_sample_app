@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 
 class VerificationCodeDigitView extends StatefulWidget {
-  const VerificationCodeDigitView({super.key});
+  const VerificationCodeDigitView({
+    required this.controller,
+    super.key,
+  });
+
+  final TextEditingController controller;
 
   @override
   State<VerificationCodeDigitView> createState() =>
@@ -10,9 +15,24 @@ class VerificationCodeDigitView extends StatefulWidget {
 
 class _VerificationCodeDigitViewState extends State<VerificationCodeDigitView> {
   bool isFilled = false;
+
+  @override
+  void initState() {
+    super.initState();
+    widget.controller.addListener(() {
+      setState(() {
+        isFilled = widget.controller.text.isNotEmpty;
+        if (isFilled) {
+          FocusScope.of(context).nextFocus();
+        }
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      controller: widget.controller,
       decoration: InputDecoration(
         enabledBorder: OutlineInputBorder(
           borderSide: BorderSide(
@@ -26,14 +46,6 @@ class _VerificationCodeDigitViewState extends State<VerificationCodeDigitView> {
       textAlign: TextAlign.center,
       maxLength: 1,
       maxLines: 1,
-      onEditingComplete: () {
-        FocusScope.of(context).nextFocus();
-      },
-      onChanged: (digit) {
-        setState(() {
-          isFilled = digit.isNotEmpty;
-        });
-      },
     );
   }
 }
