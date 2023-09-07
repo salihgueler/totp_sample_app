@@ -1,8 +1,6 @@
 // ignore_for_file: unused_local_variable, unused_element
 
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:totp_sample_app/routes.dart';
 import 'package:totp_sample_app/verification_code_digit_view.dart';
 
 class TotpVerificationPage extends StatefulWidget {
@@ -143,27 +141,7 @@ class _TotpVerificationPageState extends State<TotpVerificationPage> {
                         ),
                       ),
                       onPressed: () async {
-                        final isFormValid =
-                            _verificationFormKey.currentState?.validate() ??
-                                false;
-                        if (isFormValid) {
-                          final confirmationCode = [
-                            _digit1Controller.text,
-                            _digit2Controller.text,
-                            _digit3Controller.text,
-                            _digit4Controller.text,
-                            _digit5Controller.text,
-                            _digit6Controller.text,
-                          ].join();
-                          // TODO: Call confirnSignIn function
-                          context.go(Routes.home, extra: widget.username);
-                          _digit1Controller.clear();
-                          _digit2Controller.clear();
-                          _digit3Controller.clear();
-                          _digit4Controller.clear();
-                          _digit5Controller.clear();
-                          _digit6Controller.clear();
-                        }
+                        // TODO: Call confirmSignIn function
                       },
                       child: Padding(
                         padding: const EdgeInsets.symmetric(vertical: 12),

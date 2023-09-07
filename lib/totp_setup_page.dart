@@ -1,9 +1,7 @@
 // ignore_for_file: unused_local_variable, unused_element
 
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:qr_flutter/qr_flutter.dart';
-import 'package:totp_sample_app/routes.dart';
 import 'package:totp_sample_app/verification_code_digit_view.dart';
 
 class TotpSetupPage extends StatefulWidget {
@@ -155,25 +153,7 @@ class _TotpSetupPageState extends State<TotpSetupPage> {
                         ),
                       ),
                       onPressed: () async {
-                        final totpCode = [
-                          _digit1Controller.text,
-                          _digit2Controller.text,
-                          _digit3Controller.text,
-                          _digit4Controller.text,
-                          _digit5Controller.text,
-                          _digit6Controller.text,
-                        ].join();
                         // TODO: Call confirmSignIn function
-                        context.go(
-                          Routes.home,
-                          extra: widget.username,
-                        );
-                        _digit1Controller.clear();
-                        _digit2Controller.clear();
-                        _digit3Controller.clear();
-                        _digit4Controller.clear();
-                        _digit5Controller.clear();
-                        _digit6Controller.clear();
                       },
                       child: Padding(
                         padding: const EdgeInsets.symmetric(vertical: 12),

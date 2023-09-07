@@ -5,6 +5,7 @@ import 'package:flutter_web_plugins/url_strategy.dart';
 
 Future<void> main() async {
   usePathUrlStrategy();
+  // TODO: Call _configureAmplify
   runApp(
     const SignInFlowApplication(),
   );

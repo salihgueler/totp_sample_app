@@ -1,5 +1,4 @@
-// ignore_for_file: unused_local_variable, unused_element
-
+// ignore_for_file: unused_local_variable, unused_element, prefer_final_fields
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:totp_sample_app/routes.dart';
@@ -15,7 +14,7 @@ class _SignInPageState extends State<SignInPage> {
   late final TextEditingController _usernameController;
   late final TextEditingController _passwordController;
   late final GlobalKey<FormState> _signInFormKey;
-  final bool _isSigningIn = false;
+  bool _isSigningIn = false;
 
   @override
   void initState() {
@@ -104,21 +103,7 @@ class _SignInPageState extends State<SignInPage> {
                         onPressed: _isSigningIn
                             ? null
                             : () async {
-                                final isFormVilled =
-                                    _signInFormKey.currentState?.validate() ??
-                                        false;
-                                if (isFormVilled) {
-                                  final username = _usernameController.text;
-                                  final password = _passwordController.text;
-                                  // TODO: Call signInWithCognito function
-                                  context.go(
-                                    Routes.setupTotp,
-                                    extra: {
-                                      'username': username,
-                                      'totp_uri': username,
-                                    },
-                                  );
-                                }
+                                // TODO: Call signInWithCognito function
                               },
                         child: Padding(
                           padding: const EdgeInsets.symmetric(vertical: 12),
@@ -153,6 +138,8 @@ class _SignInPageState extends State<SignInPage> {
       ),
     );
   }
+
+  // TODO: Add signInWithCognito
 
   void _showSnackBar(String message) {
     ScaffoldMessenger.of(context).showSnackBar(

@@ -1,8 +1,6 @@
-// ignore_for_file: unused_local_variable, unused_element
+// ignore_for_file: unused_local_variable, unused_element, prefer_final_fields
 
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:totp_sample_app/routes.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
@@ -16,7 +14,7 @@ class _SignUpPageState extends State<SignUpPage> {
   late final TextEditingController _emailController;
   late final TextEditingController _passwordController;
   late final GlobalKey<FormState> _signUpFormKey;
-  final bool _isSigningUp = false;
+  bool _isSigningUp = false;
 
   @override
   void initState() {
@@ -122,19 +120,7 @@ class _SignUpPageState extends State<SignUpPage> {
                         onPressed: _isSigningUp
                             ? null
                             : () async {
-                                final isSignUpFormValid =
-                                    _signUpFormKey.currentState?.validate() ??
-                                        false;
-                                if (isSignUpFormValid) {
-                                  final username = _usernameController.text;
-                                  final email = _emailController.text;
-                                  final password = _passwordController.text;
-                                  // TODO: Call confirmSignUp function
-                                  context.go(
-                                    Routes.emailVerification,
-                                    extra: username,
-                                  );
-                                }
+                                // TODO: Call signUpUser function
                               },
                         child: Padding(
                           padding: const EdgeInsets.symmetric(vertical: 12),
@@ -161,6 +147,8 @@ class _SignUpPageState extends State<SignUpPage> {
       ),
     );
   }
+
+  // TODO: Implement signUpUser function
 
   void _showSnackBar(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
