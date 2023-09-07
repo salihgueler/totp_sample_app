@@ -1,4 +1,3 @@
-import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:totp_sample_app/routes.dart';
@@ -29,12 +28,7 @@ class SplashPage extends StatelessWidget {
   }
 
   Future<(String, bool)> _checkAuthStatus() async {
-    final isSignedIn = await Amplify.Auth.fetchAuthSession();
-    if (isSignedIn.isSignedIn) {
-      final username = (await Amplify.Auth.getCurrentUser()).username;
-      return (username, true);
-    } else {
-      return ('', false);
-    }
+    // TODO: Update Authentication Status
+    return ('', false);
   }
 }

@@ -1,5 +1,5 @@
-import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
-import 'package:amplify_flutter/amplify_flutter.dart';
+// ignore_for_file: unused_local_variable, unused_element
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:qr_flutter/qr_flutter.dart';
@@ -163,33 +163,17 @@ class _TotpSetupPageState extends State<TotpSetupPage> {
                           _digit5Controller.text,
                           _digit6Controller.text,
                         ].join();
-                        try {
-                          await Amplify.Auth.confirmSignIn(
-                            confirmationValue: totpCode,
-                          );
-                          if (mounted) {
-                            context.go(
-                              Routes.home,
-                              extra: widget.username,
-                            );
-                          }
-                        } on AuthException catch (e) {
-                          switch (e) {
-                            case CodeMismatchException _:
-                              _showSnackBar('Invalid verification code');
-                              break;
-                            default:
-                              _showSnackBar('Verification failed. $e');
-                              break;
-                          }
-                        } finally {
-                          _digit1Controller.clear();
-                          _digit2Controller.clear();
-                          _digit3Controller.clear();
-                          _digit4Controller.clear();
-                          _digit5Controller.clear();
-                          _digit6Controller.clear();
-                        }
+                        // TODO: Call confirmSignIn function
+                        context.go(
+                          Routes.home,
+                          extra: widget.username,
+                        );
+                        _digit1Controller.clear();
+                        _digit2Controller.clear();
+                        _digit3Controller.clear();
+                        _digit4Controller.clear();
+                        _digit5Controller.clear();
+                        _digit6Controller.clear();
                       },
                       child: Padding(
                         padding: const EdgeInsets.symmetric(vertical: 12),

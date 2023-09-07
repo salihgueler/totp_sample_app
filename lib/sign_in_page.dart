@@ -1,5 +1,5 @@
-import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
-import 'package:amplify_flutter/amplify_flutter.dart';
+// ignore_for_file: unused_local_variable, unused_element
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:totp_sample_app/routes.dart';
@@ -15,7 +15,7 @@ class _SignInPageState extends State<SignInPage> {
   late final TextEditingController _usernameController;
   late final TextEditingController _passwordController;
   late final GlobalKey<FormState> _signInFormKey;
-  bool _isSigningIn = false;
+  final bool _isSigningIn = false;
 
   @override
   void initState() {
@@ -110,39 +110,14 @@ class _SignInPageState extends State<SignInPage> {
                                 if (isFormVilled) {
                                   final username = _usernameController.text;
                                   final password = _passwordController.text;
-                                  try {
-                                    setState(() {
-                                      _isSigningIn = true;
-                                    });
-                                    await signInWithCognito(username, password);
-                                  } on AuthException catch (e) {
-                                    switch (e) {
-                                      case UserNotFoundException _:
-                                        _showSnackBar(
-                                            'User not found. Sign up?');
-                                        _usernameController.clear();
-                                        _passwordController.clear();
-                                        break;
-                                      case InvalidPasswordException _:
-                                        _showSnackBar(
-                                          'Wrong password. Forgot password?',
-                                        );
-                                        _passwordController.clear();
-                                        break;
-                                      case LimitExceededException _:
-                                        _showSnackBar(
-                                          'Attempt limit exceeded, please try again later.',
-                                        );
-                                        break;
-                                      default:
-                                        safePrint('Sign in failed: $e');
-                                        break;
-                                    }
-                                  } finally {
-                                    setState(() {
-                                      _isSigningIn = false;
-                                    });
-                                  }
+                                  // TODO: Call signInWithCognito function
+                                  context.go(
+                                    Routes.setupTotp,
+                                    extra: {
+                                      'username': username,
+                                      'totp_uri': username,
+                                    },
+                                  );
                                 }
                               },
                         child: Padding(
@@ -177,72 +152,6 @@ class _SignInPageState extends State<SignInPage> {
         ),
       ),
     );
-  }
-
-  Future<void> signInWithCognito(
-    String username,
-    String password,
-  ) async {
-    final result = await Amplify.Auth.signIn(
-      username: username,
-      password: password,
-    );
-    await _handleSignInResult(result);
-  }
-
-  Future<void> _handleSignInResult(SignInResult result) async {
-    safePrint(result);
-    switch (result.nextStep.signInStep) {
-      case AuthSignInStep.continueSignInWithMfaSelection:
-      // Handle select from MFA methods case
-      case AuthSignInStep.continueSignInWithTotpSetup:
-        if (mounted) {
-          final totpSetupDetails = result.nextStep.totpSetupDetails!;
-          final setupUri = totpSetupDetails.getSetupUri(
-            appName: 'TOTP_SAMPLE_APP',
-          );
-          context.go(
-            Routes.setupTotp,
-            extra: <String, String>{
-              'username': _usernameController.text,
-              'totp_uri': setupUri.toString(),
-            },
-          );
-        }
-      case AuthSignInStep.confirmSignInWithTotpMfaCode:
-        context.go(
-          Routes.verifyTotp,
-          extra: _usernameController.text,
-        );
-      case AuthSignInStep.confirmSignInWithSmsMfaCode:
-      // Handle SMS MFA case
-      case AuthSignInStep.confirmSignInWithNewPassword:
-      // Handle new password case
-      case AuthSignInStep.confirmSignInWithCustomChallenge:
-      // Handle custom challenge case
-      case AuthSignInStep.resetPassword:
-      // Handle reset password case
-      case AuthSignInStep.confirmSignUp:
-        final resendResult = await Amplify.Auth.resendSignUpCode(
-          username: _usernameController.text,
-        );
-        _showSnackBar(
-          'Verification code sent to ${resendResult.codeDeliveryDetails.destination}',
-        );
-        if (mounted) {
-          context.go(
-            Routes.emailVerification,
-            extra: _usernameController.text,
-          );
-        }
-      case AuthSignInStep.done:
-        if (mounted) {
-          context.go(
-            Routes.home,
-            extra: _usernameController.text,
-          );
-        }
-    }
   }
 
   void _showSnackBar(String message) {

@@ -1,5 +1,5 @@
-import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
-import 'package:amplify_flutter/amplify_flutter.dart';
+// ignore_for_file: unused_local_variable, unused_element
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:totp_sample_app/routes.dart';
@@ -16,7 +16,7 @@ class _SignUpPageState extends State<SignUpPage> {
   late final TextEditingController _emailController;
   late final TextEditingController _passwordController;
   late final GlobalKey<FormState> _signUpFormKey;
-  bool _isSigningUp = false;
+  final bool _isSigningUp = false;
 
   @override
   void initState() {
@@ -129,43 +129,11 @@ class _SignUpPageState extends State<SignUpPage> {
                                   final username = _usernameController.text;
                                   final email = _emailController.text;
                                   final password = _passwordController.text;
-
-                                  try {
-                                    setState(() {
-                                      _isSigningUp = true;
-                                    });
-                                    await signUpUser(
-                                      username: username,
-                                      password: password,
-                                      email: email,
-                                    );
-                                    if (mounted) {
-                                      context.go(
-                                        Routes.emailVerification,
-                                        extra: username,
-                                      );
-                                    }
-                                  } on AuthException catch (e) {
-                                    switch (e) {
-                                      case UsernameExistsException _:
-                                        _showSnackBar(
-                                            'Username already exists');
-                                        _usernameController.clear();
-                                        break;
-                                      case InvalidPasswordException _:
-                                        _showSnackBar(
-                                            'Invalid password format');
-                                        _passwordController.clear();
-                                        break;
-                                      default:
-                                        _showSnackBar('Sign up failed. $e');
-                                        break;
-                                    }
-                                  } finally {
-                                    setState(() {
-                                      _isSigningUp = false;
-                                    });
-                                  }
+                                  // TODO: Call confirmSignUp function
+                                  context.go(
+                                    Routes.emailVerification,
+                                    extra: username,
+                                  );
                                 }
                               },
                         child: Padding(
@@ -191,42 +159,6 @@ class _SignUpPageState extends State<SignUpPage> {
           ),
         ),
       ),
-    );
-  }
-
-  Future<void> signUpUser({
-    required String username,
-    required String password,
-    required String email,
-  }) async {
-    final userAttributes = {
-      AuthUserAttributeKey.email: email,
-    };
-    final result = await Amplify.Auth.signUp(
-      username: username,
-      password: password,
-      options: SignUpOptions(
-        userAttributes: userAttributes,
-      ),
-    );
-    await _handleSignUpResult(result);
-  }
-
-  Future<void> _handleSignUpResult(SignUpResult result) async {
-    switch (result.nextStep.signUpStep) {
-      case AuthSignUpStep.confirmSignUp:
-        _handleCodeDelivery(result.nextStep.codeDeliveryDetails);
-        break;
-      case AuthSignUpStep.done:
-        _showSnackBar('Sign up is complete');
-        break;
-    }
-  }
-
-  void _handleCodeDelivery(AuthCodeDeliveryDetails? codeDeliveryDetails) {
-    _showSnackBar(
-      'A confirmation code has been sent to ${codeDeliveryDetails?.destination}. '
-      'Please check your ${codeDeliveryDetails?.deliveryMedium.name} for the code.',
     );
   }
 

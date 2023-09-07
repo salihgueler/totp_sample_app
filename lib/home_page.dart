@@ -1,7 +1,6 @@
-import 'package:amplify_flutter/amplify_flutter.dart';
+// ignore_for_file: unused_local_variable, unused_element
+
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:totp_sample_app/routes.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({
@@ -63,14 +62,7 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ),
                       onPressed: () async {
-                        try {
-                          await Amplify.Auth.signOut();
-                          if (mounted) {
-                            context.go(Routes.signIn);
-                          }
-                        } on AuthException catch (e) {
-                          _showSnackBar('Error signing out - ${e.message}');
-                        }
+                        // TODO: Call signOut function
                       },
                       child: Padding(
                         padding: const EdgeInsets.symmetric(vertical: 12),

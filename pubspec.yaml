@@ -7,8 +7,6 @@ environment:
   sdk: '>=3.1.0 <4.0.0'
 
 dependencies:
-  amplify_auth_cognito: ^1.4.0
-  amplify_flutter: ^1.4.0
   flutter:
     sdk: flutter
   font_awesome_flutter: ^10.5.0
