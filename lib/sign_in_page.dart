@@ -123,9 +123,9 @@ class _SignInPageState extends State<SignInPage> {
                                         _usernameController.clear();
                                         _passwordController.clear();
                                         break;
-                                      case InvalidPasswordException _:
+                                      case NotAuthorizedServiceException _:
                                         _showSnackBar(
-                                          'Wrong password. Forgot password?',
+                                          'Wrong password or username. Check your information',
                                         );
                                         _passwordController.clear();
                                         break;
